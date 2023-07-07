@@ -217,10 +217,10 @@ public:
     void bouncingBall(unsigned long delayTime, unsigned long duration)
     {
         unsigned long startTime = millis();
-        int directionX = 1; // Horizontal direction of ball
-        int directionY = 1; // Vertical direction of ball
-        int posX = 0;       // Current horizontal position
-        int posY = 0;       // Current vertical position
+        int posX = 0;                          // Current horizontal position
+        int posY = 0;                          // Current vertical position
+        int directionX = random(0, 2) * 2 - 1; // Random horizontal direction of ball (-1 or 1)
+        int directionY = random(0, 2) * 2 - 1; // Random vertical direction of ball (-1 or 1)
 
         while (millis() - startTime < duration)
         {
@@ -239,14 +239,14 @@ public:
             posX += directionX;
             posY += directionY;
 
-            // Bounce if ball hits an edge
+            // If ball hits an edge, randomize the bouncing direction
             if (posX == 0 || posX == 3)
             {
-                directionX = -directionX;
+                directionX = random(0, 2) * 2 - 1; // Random horizontal direction of ball (-1 or 1)
             }
             if (posY == 0 || posY == 3)
             {
-                directionY = -directionY;
+                directionY = random(0, 2) * 2 - 1; // Random vertical direction of ball (-1 or 1)
             }
         }
     }
