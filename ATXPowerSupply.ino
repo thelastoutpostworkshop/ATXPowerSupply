@@ -80,9 +80,9 @@ public:
     }
 
     // Checkerboard pattern
-    void checkerboard(int delayTime)
+    void checkerboard(int delayTime,int count)
     {
-        for (int j = 0; j < 20; j++)
+        for (int j = 0; j < count; j++)
         {
             for (int i = 0; i < 16; i++)
             {
@@ -129,6 +129,6 @@ void loop()
     delay(1000);
     ledMatrix.blink(100, 10);
     delay(1000);
-    ledMatrix.checkerboard(500);
+    ledMatrix.checkerboard(500,20);
     delay(1000);
 }
