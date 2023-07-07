@@ -69,24 +69,6 @@ public:
         }
     }
 
-    // Rapidly blink all LEDs
-    void blink(int delayTime, int numBlinks)
-    {
-        for (int j = 0; j < numBlinks; j++)
-        {
-            for (int i = 0; i < 16; i++)
-            {
-                digitalWrite(leds[i], HIGH);
-            }
-            delay(delayTime);
-            for (int i = 0; i < 16; i++)
-            {
-                digitalWrite(leds[i], LOW);
-            }
-            delay(delayTime);
-        }
-    }
-
     // Checkerboard pattern
     void checkerboard(int delayTime, int count)
     {
@@ -184,6 +166,28 @@ public:
             delay(delayTime);
         }
     }
+
+    void movingDot(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            // Cycle through each LED on the perimeter
+            for (int i = 0; i < 16; i++)
+            {
+                // Turn off all LEDs
+                for (int j = 0; j < 16; j++)
+                {
+                    digitalWrite(leds[j], LOW);
+                }
+
+                // Turn on current LED
+                digitalWrite(leds[i], HIGH);
+                delay(delayTime);
+            }
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -192,11 +196,10 @@ void setup()
 {
     ledMatrix.begin();
     // ledMatrix.wave(200, 10000);
-    ledMatrix.flashAll(200, 10000);
-    ledMatrix.all(LOW);
+    // ledMatrix.flashAll(200, 10000);
+    ledMatrix.movingDot(200,10000);
 }
 
 void loop()
 {
-
 }
