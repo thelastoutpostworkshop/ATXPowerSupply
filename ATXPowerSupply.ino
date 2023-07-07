@@ -119,6 +119,54 @@ public:
         }
         all(LOW);
     }
+
+    // Wave pattern with specified duration and delay
+    void wave(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            // Light up the outer frame
+            for (int i = 0; i < 4; i++)
+            {
+                digitalWrite(leds[i], HIGH);      // Top row
+                digitalWrite(leds[15 - i], HIGH); // Bottom row
+            }
+            digitalWrite(leds[4], HIGH); // Left column
+            digitalWrite(leds[7], HIGH);
+            digitalWrite(leds[8], HIGH);
+            digitalWrite(leds[11], HIGH); // Right column
+
+            delay(delayTime);
+
+            // Turn off the outer frame and light up the inner frame
+            for (int i = 0; i < 4; i++)
+            {
+                digitalWrite(leds[i], LOW);      // Top row
+                digitalWrite(leds[15 - i], LOW); // Bottom row
+            }
+            digitalWrite(leds[4], LOW); // Left column
+            digitalWrite(leds[7], LOW);
+            digitalWrite(leds[8], LOW);
+            digitalWrite(leds[11], LOW); // Right column
+
+            digitalWrite(leds[5], HIGH); // Inner frame
+            digitalWrite(leds[6], HIGH);
+            digitalWrite(leds[9], HIGH);
+            digitalWrite(leds[10], HIGH);
+
+            delay(delayTime);
+
+            // Turn off the inner frame
+            digitalWrite(leds[5], LOW);
+            digitalWrite(leds[6], LOW);
+            digitalWrite(leds[9], LOW);
+            digitalWrite(leds[10], LOW);
+
+            delay(delayTime);
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -126,18 +174,21 @@ LEDMatrix ledMatrix(leds);
 void setup()
 {
     ledMatrix.begin();
+    ledMatrix.wave(200,10000);
+    ledMatrix.all(LOW);
 }
 
 void loop()
 {
-    ledMatrix.rowOn(1, 200);
-    delay(1000);
-    ledMatrix.columnOn(2, 200);
-    delay(1000);
-    ledMatrix.zigzag(200);
-    delay(1000);
-    ledMatrix.blink(100, 10);
-    delay(1000);
-    ledMatrix.checkerboard(500, 20);
-    delay(1000);
+    // ledMatrix.rowOn(1, 200);
+    // delay(1000);
+    // ledMatrix.columnOn(2, 200);
+    // delay(1000);
+    // ledMatrix.zigzag(200);
+    // delay(1000);
+    // ledMatrix.blink(100, 10);
+    // delay(1000);
+    // ledMatrix.checkerboard(500, 20);
+    // delay(1000);
+    // ledMatrix.wave(300);
 }
