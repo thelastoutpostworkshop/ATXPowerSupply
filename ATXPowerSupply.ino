@@ -250,6 +250,103 @@ public:
             }
         }
     }
+
+    void scannerPattern(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        // Start with horizontal (row-wise) scanning
+        bool horizontalScan = true;
+
+        while (millis() - startTime < duration)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                // Switch off all LEDs
+                for (int j = 0; j < 16; j++)
+                {
+                    digitalWrite(leds[j], LOW);
+                }
+
+                // Switch on the LEDs in the current row/column
+                for (int j = 0; j < 4; j++)
+                {
+                    if (horizontalScan)
+                    {
+                        // Illuminate row
+                        digitalWrite(leds[i * 4 + j], HIGH);
+                    }
+                    else
+                    {
+                        // Illuminate column
+                        digitalWrite(leds[j * 4 + i], HIGH);
+                    }
+                }
+
+                delay(delayTime);
+            }
+
+            // Alternate between horizontal and vertical scanning
+            horizontalScan = !horizontalScan;
+        }
+    }
+
+    void snakePattern(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+        while (millis() - startTime < duration)
+        {
+            // For loop to cycle through every LED in a snake pattern
+            for (int i = 0; i < 16; i++)
+            {
+                digitalWrite(leds[i], HIGH);
+                delay(delayTime);
+            }
+            // Now unfill the snake pattern
+            for (int i = 15; i >= 0; i--)
+            {
+                digitalWrite(leds[i], LOW);
+                delay(delayTime);
+            }
+        }
+    }
+
+    void clearDisplay(void)
+    {
+        all(LOW);
+    }
+    void cornerCross(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        // Continue animation until duration time has passed
+        while (millis() - startTime < duration)
+        {
+            // Turn on opposite corners
+            digitalWrite(leds[0], HIGH);  // Top left
+            digitalWrite(leds[15], HIGH); // Bottom right
+
+            delay(delayTime);
+
+            // Turn off opposite corners
+            digitalWrite(leds[0], LOW);  // Top left
+            digitalWrite(leds[15], LOW); // Bottom right
+
+            delay(delayTime);
+
+            // Turn on other set of opposite corners
+            digitalWrite(leds[3], HIGH);  // Top right
+            digitalWrite(leds[12], HIGH); // Bottom left
+
+            delay(delayTime);
+
+            // Turn off other set of opposite corners
+            digitalWrite(leds[3], LOW);  // Top right
+            digitalWrite(leds[12], LOW); // Bottom left
+
+            delay(delayTime);
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -260,7 +357,8 @@ void setup()
     // ledMatrix.wave(200, 10000);
     // ledMatrix.flashAll(200, 10000);
     // ledMatrix.movingDot(200, 10000);
-    ledMatrix.bouncingBall(200, 10000);
+    // ledMatrix.countdown(500, 10000);
+    ledMatrix.cornerCross(100,10000);
 }
 
 void loop()
