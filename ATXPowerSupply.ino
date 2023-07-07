@@ -26,6 +26,14 @@ public:
         }
     }
 
+    void all(int value)
+    {
+        for (int i = 0; i < 16; i++)
+        {
+            digitalWrite(leds[i], value);
+        }
+    }
+
     // Turn on LEDs by row
     void rowOn(int rowNum, int delayTime)
     {
@@ -80,7 +88,7 @@ public:
     }
 
     // Checkerboard pattern
-    void checkerboard(int delayTime,int count)
+    void checkerboard(int delayTime, int count)
     {
         for (int j = 0; j < count; j++)
         {
@@ -109,6 +117,7 @@ public:
             }
             delay(delayTime);
         }
+        all(LOW);
     }
 };
 
@@ -129,6 +138,6 @@ void loop()
     delay(1000);
     ledMatrix.blink(100, 10);
     delay(1000);
-    ledMatrix.checkerboard(500,20);
+    ledMatrix.checkerboard(500, 20);
     delay(1000);
 }
