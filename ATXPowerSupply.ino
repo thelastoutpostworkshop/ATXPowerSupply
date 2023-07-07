@@ -177,6 +177,42 @@ public:
             }
         }
     }
+
+    void spiral(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            for (int i = 0; i < 4; i++)
+            { // Loop for each layer
+                for (int j = i; j < 4 - i; j++)
+                { // Top row
+                    digitalWrite(leds[i * 4 + j], HIGH);
+                    delay(delayTime);
+                    digitalWrite(leds[i * 4 + j], LOW);
+                }
+                for (int j = i + 1; j < 4 - i; j++)
+                { // Right column
+                    digitalWrite(leds[j * 4 + 4 - i - 1], HIGH);
+                    delay(delayTime);
+                    digitalWrite(leds[j * 4 + 4 - i - 1], LOW);
+                }
+                for (int j = i + 1; j < 4 - i; j++)
+                { // Bottom row
+                    digitalWrite(leds[(4 - i - 1) * 4 + 4 - j - 1], HIGH);
+                    delay(delayTime);
+                    digitalWrite(leds[(4 - i - 1) * 4 + 4 - j - 1], LOW);
+                }
+                for (int j = i + 1; j < 4 - i - 1; j++)
+                { // Left column
+                    digitalWrite(leds[(4 - j - 1) * 4 + i], HIGH);
+                    delay(delayTime);
+                    digitalWrite(leds[(4 - j - 1) * 4 + i], LOW);
+                }
+            }
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -187,7 +223,7 @@ void setup()
     // ledMatrix.wave(200, 10000);
     // ledMatrix.flashAll(200, 10000);
     // ledMatrix.movingDot(200, 10000);
-    ledMatrix.rainfall(200,10000);
+    ledMatrix.spiral(50, 10000);
 }
 
 void loop()
