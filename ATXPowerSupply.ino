@@ -167,6 +167,23 @@ public:
             delay(delayTime);
         }
     }
+
+    void flashAll(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            all(HIGH);
+
+            delay(delayTime);
+
+            // Turn off all LEDs
+            all(LOW);
+
+            delay(delayTime);
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -174,21 +191,12 @@ LEDMatrix ledMatrix(leds);
 void setup()
 {
     ledMatrix.begin();
-    ledMatrix.wave(200,10000);
+    // ledMatrix.wave(200, 10000);
+    ledMatrix.flashAll(200, 10000);
     ledMatrix.all(LOW);
 }
 
 void loop()
 {
-    // ledMatrix.rowOn(1, 200);
-    // delay(1000);
-    // ledMatrix.columnOn(2, 200);
-    // delay(1000);
-    // ledMatrix.zigzag(200);
-    // delay(1000);
-    // ledMatrix.blink(100, 10);
-    // delay(1000);
-    // ledMatrix.checkerboard(500, 20);
-    // delay(1000);
-    // ledMatrix.wave(300);
+
 }
