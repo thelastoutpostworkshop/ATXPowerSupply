@@ -34,41 +34,6 @@ public:
         }
     }
 
-    // Turn on LEDs by row
-    void rowOn(int rowNum, int delayTime)
-    {
-        for (int i = rowNum * 4; i < (rowNum * 4) + 4; i++)
-        {
-            digitalWrite(leds[i], HIGH);
-            delay(delayTime);
-            digitalWrite(leds[i], LOW);
-        }
-    }
-
-    // Turn on LEDs by column
-    void columnOn(int colNum, int delayTime)
-    {
-        for (int i = colNum; i < 16; i += 4)
-        {
-            digitalWrite(leds[i], HIGH);
-            delay(delayTime);
-            digitalWrite(leds[i], LOW);
-        }
-    }
-
-    // Zigzag pattern
-    void zigzag(int delayTime)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            rowOn(i, delayTime);
-        }
-        for (int i = 2; i >= 0; i--)
-        {
-            rowOn(i, delayTime);
-        }
-    }
-
     // Checkerboard pattern
     void checkerboard(int delayTime, int count)
     {
@@ -188,6 +153,30 @@ public:
             }
         }
     }
+
+    void rainfall(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            for (int column = 0; column < 4; column++)
+            {
+                // Turn off all LEDs
+                for (int i = 0; i < 16; i++)
+                {
+                    digitalWrite(leds[i], LOW);
+                }
+
+                // Turn on LEDs in a column
+                for (int row = 0; row < 4; row++)
+                {
+                    digitalWrite(leds[column + (4 * row)], HIGH);
+                }
+                delay(delayTime);
+            }
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -197,7 +186,8 @@ void setup()
     ledMatrix.begin();
     // ledMatrix.wave(200, 10000);
     // ledMatrix.flashAll(200, 10000);
-    ledMatrix.movingDot(200,10000);
+    // ledMatrix.movingDot(200, 10000);
+    ledMatrix.rainfall(200,10000);
 }
 
 void loop()
