@@ -213,6 +213,43 @@ public:
             }
         }
     }
+
+    void bouncingBall(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+        int directionX = 1; // Horizontal direction of ball
+        int directionY = 1; // Vertical direction of ball
+        int posX = 0;       // Current horizontal position
+        int posY = 0;       // Current vertical position
+
+        while (millis() - startTime < duration)
+        {
+            // Switch off all LEDs
+            for (int i = 0; i < 16; i++)
+            {
+                digitalWrite(leds[i], LOW);
+            }
+
+            // Switch on the LED at current ball position
+            digitalWrite(leds[posY * 4 + posX], HIGH);
+
+            delay(delayTime);
+
+            // Move ball position
+            posX += directionX;
+            posY += directionY;
+
+            // Bounce if ball hits an edge
+            if (posX == 0 || posX == 3)
+            {
+                directionX = -directionX;
+            }
+            if (posY == 0 || posY == 3)
+            {
+                directionY = -directionY;
+            }
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -223,7 +260,7 @@ void setup()
     // ledMatrix.wave(200, 10000);
     // ledMatrix.flashAll(200, 10000);
     // ledMatrix.movingDot(200, 10000);
-    ledMatrix.spiral(50, 10000);
+    ledMatrix.bouncingBall(200, 10000);
 }
 
 void loop()
