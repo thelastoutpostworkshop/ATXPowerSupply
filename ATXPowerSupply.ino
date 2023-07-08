@@ -43,7 +43,7 @@ public:
     {
         Sequence s = random(squencesCount);
         unsigned long delay = random(50, 500);
-        unsigned long duration = random(10000, 60000);
+        unsigned long duration = random(10000L, 60000L);
         switch (s)
         {
         case CHECKERBOARD:
@@ -401,8 +401,8 @@ void loop()
 {
     ledMatrix.playRandomSequence();
     ledMatrix.all(LOW);
-    unsigned long delay = random(10000, 30000);
-    unsigned long duration = random(60000, 300000);
+    unsigned long delay = random(10000L, 30000L);
+    unsigned long duration = random(60000L, 300000L);
     ledMatrix.randomLed(delay, duration);
     ledMatrix.all(LOW);
 }
