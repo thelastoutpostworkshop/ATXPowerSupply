@@ -47,30 +47,39 @@ public:
         switch (s)
         {
         case CHECKERBOARD:
+            Serial.println("checkerboard");
             checkerboard(delay, duration);
             break;
         case WAVE:
+            Serial.println("wave");
             wave(delay, duration);
             break;
         case FLASH:
+            Serial.println("flashAll");
             flashAll(delay, duration);
             break;
         case RAINFALL:
+            Serial.println("rainfall");
             rainfall(delay, duration);
             break;
         case BOUNCINGBALL:
+            Serial.println("bouncingBall");
             bouncingBall(delay, duration);
             break;
         case SCANNERPATTERN:
+            Serial.println("scannerPattern");
             scannerPattern(delay, duration);
             break;
         case CORNERCROSS:
+            Serial.println("cornerCross");
             cornerCross(delay, duration);
             break;
         case SPIRAL:
+            Serial.println("spiral");
             spiral(delay, duration);
             break;
         case RANDOMLEDS:
+            Serial.println("randomLed");
             randomLed(delay, duration);
             break;
         }
@@ -393,8 +402,9 @@ LEDMatrix ledMatrix(leds);
 
 void setup()
 {
+    Serial.begin(9600);
     ledMatrix.begin();
-    ledMatrix.flashAll(300,20000);
+    ledMatrix.flashAll(300, 20000);
 }
 
 void loop()
@@ -403,6 +413,7 @@ void loop()
     ledMatrix.all(LOW);
     unsigned long delay = random(10000L, 30000L);
     unsigned long duration = random(60000L, 300000L);
+    Serial.println("randomLed in Loop");
     ledMatrix.randomLed(delay, duration);
     ledMatrix.all(LOW);
 }
