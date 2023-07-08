@@ -19,10 +19,11 @@ private:
         SCANNERPATTERN,
         CORNERCROSS,
         RANDOMLEDS,
-        ALTERNATEBLINKING
+        ALTERNATEBLINKING,
+        OPPOSITECORNER
     };
 
-    const int squencesCount = 10;
+    const int squencesCount = 11;
 
     Sequence getRandomSequence()
     {
@@ -86,6 +87,10 @@ public:
         case ALTERNATEBLINKING:
             Serial.println("alternateBlinking");
             alternateBlinking(delay, duration);
+            break;
+        case OPPOSITECORNER:
+            Serial.println("lightFromCornerToOpposite");
+            lightFromCornerToOpposite(delay, duration);
             break;
         }
     }
@@ -447,6 +452,78 @@ public:
             }
         }
     }
+    void lightFromCornerToOpposite(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            // Choose a random corner
+            int corner = random(0, 4); // 0: top-left, 1: top-right, 2: bottom-left, 3: bottom-right
+            int startX, startY, stepX, stepY;
+
+            // Determine start points and direction of movement
+            switch (corner)
+            {
+            case 0: // top-left
+                startX = startY = 0;
+                stepX = stepY = 1;
+                break;
+            case 1: // top-right
+                startX = 3;
+                startY = 0;
+                stepX = -1;
+                stepY = 1;
+                break;
+            case 2: // bottom-left
+                startX = 0;
+                startY = 3;
+                stepX = 1;
+                stepY = -1;
+                break;
+            case 3: // bottom-right
+                startX = startY = 3;
+                stepX = stepY = -1;
+                break;
+            }
+
+            // Move through the LEDs
+            for (int i = 0; i < 4; i++)
+            {
+                // Turn on the current LED and its neighbors
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    for (int dy = -1; dy <= 1; dy++)
+                    {
+                        int x = startX + i * stepX + dx;
+                        int y = startY + i * stepY + dy;
+                        if (x >= 0 && x < 4 && y >= 0 && y < 4)
+                        {
+                            digitalWrite(leds[y * 4 + x], HIGH);
+                        }
+                    }
+                }
+
+                // Check if the duration has passed
+                if (millis() - startTime >= duration)
+                {
+                    return;
+                }
+
+                // Wait for a short period of time
+                delay(delayTime);
+            }
+
+            // After lighting up the diagonal and its neighbors, wait before moving to the next corner
+            delay(delayTime);
+        }
+
+        // When duration has passed, turn off all LEDs
+        for (int i = 0; i < 16; i++)
+        {
+            digitalWrite(leds[i], LOW);
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -469,5 +546,5 @@ void loop()
     // ledMatrix.randomLed(delay, duration);
     // ledMatrix.all(LOW);
 
-    ledMatrix.alternateBlinking(200, 10000);
+    ledMatrix.lightFromCornerToOpposite(200, 10000);
 }
