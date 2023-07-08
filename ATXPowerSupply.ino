@@ -349,6 +349,28 @@ public:
         }
     }
 
+    void randomLed(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+
+        // Continue animation until duration time has passed
+        while (millis() - startTime < duration)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                int r = random(2);
+                if (r == 0)
+                {
+                    digitalWrite(leds[i], HIGH);
+                }
+                else
+                {
+                    digitalWrite(leds[i], LOW);
+                }
+            }
+            delay(delayTime);
+        }
+    }
     void clearDisplay(void)
     {
         all(LOW);
@@ -398,5 +420,6 @@ void loop()
 {
     ledMatrix.playRandomSequence();
     ledMatrix.all(LOW);
-    // delay(random(60000, 300000));
+    ledMatrix.randomLed(random(10000, 150000), random(60000, 300000));
+    ledMatrix.all(LOW);
 }
