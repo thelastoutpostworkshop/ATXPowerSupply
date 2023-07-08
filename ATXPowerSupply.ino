@@ -17,10 +17,11 @@ private:
         SPIRAL,
         BOUNCINGBALL,
         SCANNERPATTERN,
-        CORNERCROSS
+        CORNERCROSS,
+        RANDOMLEDS
     };
 
-    const int squencesCount = 8;
+    const int squencesCount = 9;
 
     Sequence getRandomSequence()
     {
@@ -68,6 +69,9 @@ public:
             break;
         case SPIRAL:
             spiral(delay, duration);
+            break;
+        case RANDOMLEDS:
+            randomLed(delay, duration);
             break;
         }
     }
