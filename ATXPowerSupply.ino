@@ -63,9 +63,6 @@ public:
         case SCANNERPATTERN:
             scannerPattern(delay, duration);
             break;
-        case SNAKEPATTERN:
-            snakePattern(delay, duration);
-            break;
         case CORNERCROSS:
             cornerCross(delay, duration);
             break;
