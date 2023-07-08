@@ -17,11 +17,10 @@ private:
         SPIRAL,
         BOUNCINGBALL,
         SCANNERPATTERN,
-        SNAKEPATTERN,
         CORNERCROSS
     };
 
-    const int squencesCount = 10;
+    const int squencesCount = 8;
 
     Sequence getRandomSequence()
     {
@@ -326,26 +325,6 @@ public:
 
             // Alternate between horizontal and vertical scanning
             horizontalScan = !horizontalScan;
-        }
-    }
-
-    void snakePattern(unsigned long delayTime, unsigned long duration)
-    {
-        unsigned long startTime = millis();
-        while (millis() - startTime < duration)
-        {
-            // For loop to cycle through every LED in a snake pattern
-            for (int i = 0; i < 16; i++)
-            {
-                digitalWrite(leds[i], HIGH);
-                delay(delayTime);
-            }
-            // Now unfill the snake pattern
-            for (int i = 15; i >= 0; i--)
-            {
-                digitalWrite(leds[i], LOW);
-                delay(delayTime);
-            }
         }
     }
 
