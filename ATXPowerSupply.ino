@@ -4,16 +4,75 @@ int ledsCount = sizeof(leds) / sizeof(leds[0]);
 
 class LEDMatrix
 {
-public:
+private:
     // LED pins
     int leds[16];
 
+    enum Sequence
+    {
+        CHECKERBOARD = 0,
+        WAVE,
+        FLASH,
+        RAINFALL,
+        SPIRAL,
+        BOUNCINGBALL,
+        SCANNERPATTERN,
+        SNAKEPATTERN,
+        CORNERCROSS
+    };
+
+    const int squencesCount = 10;
+
+    Sequence getRandomSequence()
+    {
+        int randomValue = random(squencesCount);
+        return static_cast<Sequence>(randomValue);
+    }
+
+public:
     // Constructor
     LEDMatrix(int ledPins[16])
     {
         for (int i = 0; i < 16; i++)
         {
             leds[i] = ledPins[i];
+        }
+    }
+
+    void playRandomSequence(void)
+    {
+        Sequence s = random(squencesCount);
+        unsigned long delay = random(50, 500);
+        unsigned long duration = random(10000, 60000);
+        switch (s)
+        {
+        case CHECKERBOARD:
+            checkerboard(delay, duration);
+            break;
+        case WAVE:
+            wave(delay, duration);
+            break;
+        case FLASH:
+            flashAll(delay, duration);
+            break;
+        case RAINFALL:
+            rainfall(delay, duration);
+            break;
+        case BOUNCINGBALL:
+            bouncingBall(delay, duration);
+            break;
+        case SCANNERPATTERN:
+            scannerPattern(delay, duration);
+            break;
+        case SNAKEPATTERN:
+            snakePattern(delay, duration);
+            break;
+        case CORNERCROSS:
+            cornerCross(delay, duration);
+            break;
+        case SPIRAL:
+            spiral(delay, duration);
+            break;
         }
     }
 
@@ -35,9 +94,11 @@ public:
     }
 
     // Checkerboard pattern
-    void checkerboard(int delayTime, int count)
+    void checkerboard(unsigned long delayTime, unsigned long duration)
     {
-        for (int j = 0; j < count; j++)
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
         {
             for (int i = 0; i < 16; i++)
             {
@@ -64,7 +125,6 @@ public:
             }
             delay(delayTime);
         }
-        all(LOW);
     }
 
     // Wave pattern with specified duration and delay
@@ -129,28 +189,6 @@ public:
             all(LOW);
 
             delay(delayTime);
-        }
-    }
-
-    void movingDot(unsigned long delayTime, unsigned long duration)
-    {
-        unsigned long startTime = millis();
-
-        while (millis() - startTime < duration)
-        {
-            // Cycle through each LED on the perimeter
-            for (int i = 0; i < 16; i++)
-            {
-                // Turn off all LEDs
-                for (int j = 0; j < 16; j++)
-                {
-                    digitalWrite(leds[j], LOW);
-                }
-
-                // Turn on current LED
-                digitalWrite(leds[i], HIGH);
-                delay(delayTime);
-            }
         }
     }
 
@@ -354,13 +392,11 @@ LEDMatrix ledMatrix(leds);
 void setup()
 {
     ledMatrix.begin();
-    // ledMatrix.wave(200, 10000);
-    // ledMatrix.flashAll(200, 10000);
-    // ledMatrix.movingDot(200, 10000);
-    // ledMatrix.countdown(500, 10000);
-    ledMatrix.cornerCross(100,10000);
 }
 
 void loop()
 {
+    ledMatrix.playRandomSequence();
+    ledMatrix.all(LOW);
+    // delay(random(60000, 300000));
 }
