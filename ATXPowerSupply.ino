@@ -15,7 +15,6 @@ private:
         FLASH,
         RAINFALL,
         SPIRAL,
-        BOUNCINGBALL,
         SCANNERPATTERN,
         CORNERCROSS,
         RANDOMLEDS,
@@ -24,7 +23,7 @@ private:
         SIMULATESOUNDLEVEL
     };
 
-    const int squencesCount = 11;
+    const int squencesCount = 10;
 
     Sequence getRandomSequence()
     {
@@ -64,10 +63,6 @@ public:
         case RAINFALL:
             Serial.println("rainfall");
             rainfall(delay, duration);
-            break;
-        case BOUNCINGBALL:
-            Serial.println("bouncingBall");
-            bouncingBall(delay, duration);
             break;
         case SCANNERPATTERN:
             Serial.println("scannerPattern");
@@ -272,43 +267,6 @@ public:
                     delay(delayTime);
                     digitalWrite(leds[(4 - j - 1) * 4 + i], LOW);
                 }
-            }
-        }
-    }
-
-    void bouncingBall(unsigned long delayTime, unsigned long duration)
-    {
-        unsigned long startTime = millis();
-        int posX = 0;                          // Current horizontal position
-        int posY = 0;                          // Current vertical position
-        int directionX = random(0, 2) * 2 - 1; // Random horizontal direction of ball (-1 or 1)
-        int directionY = random(0, 2) * 2 - 1; // Random vertical direction of ball (-1 or 1)
-
-        while (millis() - startTime < duration)
-        {
-            // Switch off all LEDs
-            for (int i = 0; i < 16; i++)
-            {
-                digitalWrite(leds[i], LOW);
-            }
-
-            // Switch on the LED at current ball position
-            digitalWrite(leds[posY * 4 + posX], HIGH);
-
-            delay(delayTime);
-
-            // Move ball position
-            posX += directionX;
-            posY += directionY;
-
-            // If ball hits an edge, randomize the bouncing direction
-            if (posX == 0 || posX == 3)
-            {
-                directionX = random(0, 2) * 2 - 1; // Random horizontal direction of ball (-1 or 1)
-            }
-            if (posY == 0 || posY == 3)
-            {
-                directionY = random(0, 2) * 2 - 1; // Random vertical direction of ball (-1 or 1)
             }
         }
     }
