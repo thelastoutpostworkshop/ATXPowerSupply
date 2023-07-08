@@ -554,6 +554,10 @@ public:
                 }
             }
             delay(100);
+            for (int i = 0; i < 16; i++)
+            {
+                digitalWrite(leds[i], LOW);
+            }
         }
     }
 };
@@ -570,13 +574,11 @@ void setup()
 
 void loop()
 {
-    // ledMatrix.playRandomSequence();
-    // ledMatrix.all(LOW);
-    // unsigned long delay = random(10000L, 30000L);
-    // unsigned long duration = random(60000L, 300000L);
-    // Serial.println("randomLed in Loop");
-    // ledMatrix.randomLed(delay, duration);
-    // ledMatrix.all(LOW);
-
-    ledMatrix.simulateSound(200, 10000);
+    ledMatrix.playRandomSequence();
+    ledMatrix.all(LOW);
+    unsigned long delay = random(10000L, 30000L);
+    unsigned long duration = random(60000L, 300000L);
+    Serial.println("randomLed in Loop");
+    ledMatrix.randomLed(delay, duration);
+    ledMatrix.all(LOW);
 }
