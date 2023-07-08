@@ -41,7 +41,7 @@ public:
 
     void playRandomSequence(void)
     {
-        Sequence s = random(squencesCount);
+        Sequence s = getRandomSequence();
         unsigned long delay = random(50, 500);
         unsigned long duration = random(10000L, 60000L);
         switch (s)
@@ -394,6 +394,44 @@ public:
             digitalWrite(leds[12], LOW); // Bottom left
 
             delay(delayTime);
+        }
+    }
+
+    void swirl(unsigned long delayTime, unsigned long duration)
+    {
+        unsigned long startTime = millis();
+        int currentLED = 0;
+        int direction = 1;
+
+        // Continue animation until duration time has passed
+        while (millis() - startTime < duration)
+        {
+
+            // Reset the current LED if it goes out of bounds
+            if (currentLED > 15)
+            {
+                currentLED = 0;
+            }
+            else if (currentLED < 0)
+            {
+                currentLED = 15;
+            }
+
+            // Turn on the current LED
+            digitalWrite(leds[currentLED], HIGH);
+            delay(delayTime);
+
+            // Turn off the current LED
+            digitalWrite(leds[currentLED], LOW);
+
+            // Update the current LED based on the direction
+            currentLED += direction;
+
+            // Change the direction at the corners
+            if (currentLED == 0 || currentLED == 3 || currentLED == 12 || currentLED == 15)
+            {
+                direction *= -1;
+            }
         }
     }
 };
