@@ -401,6 +401,8 @@ void loop()
 {
     ledMatrix.playRandomSequence();
     ledMatrix.all(LOW);
-    ledMatrix.randomLed(random(10000, 150000), random(60000, 300000));
+    unsigned long delay = random(10000, 30000);
+    unsigned long duration = random(60000, 300000);
+    ledMatrix.randomLed(delay, duration);
     ledMatrix.all(LOW);
 }
