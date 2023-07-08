@@ -20,7 +20,8 @@ private:
         CORNERCROSS,
         RANDOMLEDS,
         ALTERNATEBLINKING,
-        OPPOSITECORNER
+        OPPOSITECORNER,
+        SIMULATESOUNDLEVEL
     };
 
     const int squencesCount = 11;
@@ -91,6 +92,10 @@ public:
         case OPPOSITECORNER:
             Serial.println("lightFromCornerToOpposite");
             lightFromCornerToOpposite(delay, duration);
+            break;
+        case SIMULATESOUNDLEVEL:
+            Serial.println("simulateSound");
+            simulateSound(delay, duration);
             break;
         }
     }
@@ -524,6 +529,33 @@ public:
             digitalWrite(leds[i], LOW);
         }
     }
+
+    void simulateSound(unsigned long delayTime, unsigned long duration)
+    {
+        int minSoundValue = 0;
+        int maxSoundValue = 1023;
+        unsigned long startTime = millis();
+
+        while (millis() - startTime < duration)
+        {
+            int soundLevel = random(minSoundValue, maxSoundValue + 1);
+
+            for (int i = 0; i < 16; i++)
+            {
+                // LEDs will light up based on the simulated sound level
+                int threshold = map(i, 0, 15, minSoundValue, maxSoundValue);
+                if (soundLevel >= threshold)
+                {
+                    digitalWrite(leds[i], HIGH);
+                }
+                else
+                {
+                    digitalWrite(leds[i], LOW);
+                }
+            }
+            delay(100);
+        }
+    }
 };
 
 LEDMatrix ledMatrix(leds);
@@ -546,5 +578,5 @@ void loop()
     // ledMatrix.randomLed(delay, duration);
     // ledMatrix.all(LOW);
 
-    ledMatrix.lightFromCornerToOpposite(200, 10000);
+    ledMatrix.simulateSound(200, 10000);
 }
