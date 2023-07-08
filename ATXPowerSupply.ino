@@ -394,7 +394,7 @@ LEDMatrix ledMatrix(leds);
 void setup()
 {
     ledMatrix.begin();
-    ledMatrix.flashAll(300,10000);
+    ledMatrix.flashAll(300,20000);
 }
 
 void loop()
