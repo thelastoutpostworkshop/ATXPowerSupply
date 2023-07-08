@@ -18,10 +18,11 @@ private:
         BOUNCINGBALL,
         SCANNERPATTERN,
         CORNERCROSS,
-        RANDOMLEDS
+        RANDOMLEDS,
+        ALTERNATEBLINKING
     };
 
-    const int squencesCount = 9;
+    const int squencesCount = 10;
 
     Sequence getRandomSequence()
     {
@@ -81,6 +82,10 @@ public:
         case RANDOMLEDS:
             Serial.println("randomLed");
             randomLed(delay, duration);
+            break;
+        case ALTERNATEBLINKING:
+            Serial.println("alternateBlinking");
+            alternateBlinking(delay, duration);
             break;
         }
     }
@@ -397,40 +402,48 @@ public:
         }
     }
 
-    void swirl(unsigned long delayTime, unsigned long duration)
+    void alternateBlinking(unsigned long delayTime, unsigned long duration)
     {
         unsigned long startTime = millis();
-        int currentLED = 0;
-        int direction = 1;
 
-        // Continue animation until duration time has passed
+        // Select two distinct random rows
+        int row1 = random(0, 4); // Rows are 0-indexed
+        int row2;
+        do
+        {
+            row2 = random(0, 4);
+        } while (row2 == row1);
+
         while (millis() - startTime < duration)
         {
-
-            // Reset the current LED if it goes out of bounds
-            if (currentLED > 15)
+            // Turn on the LEDs in the first row
+            for (int i = 0; i < 4; i++)
             {
-                currentLED = 0;
-            }
-            else if (currentLED < 0)
-            {
-                currentLED = 15;
+                digitalWrite(leds[row1 * 4 + i], HIGH); // Adjust this if your setup differs
             }
 
-            // Turn on the current LED
-            digitalWrite(leds[currentLED], HIGH);
+            // Wait for a short period of time
             delay(delayTime);
 
-            // Turn off the current LED
-            digitalWrite(leds[currentLED], LOW);
-
-            // Update the current LED based on the direction
-            currentLED += direction;
-
-            // Change the direction at the corners
-            if (currentLED == 0 || currentLED == 3 || currentLED == 12 || currentLED == 15)
+            // Turn off the LEDs in the first row
+            for (int i = 0; i < 4; i++)
             {
-                direction *= -1;
+                digitalWrite(leds[row1 * 4 + i], LOW); // Adjust this if your setup differs
+            }
+
+            // Turn on the LEDs in the second row
+            for (int i = 0; i < 4; i++)
+            {
+                digitalWrite(leds[row2 * 4 + i], HIGH); // Adjust this if your setup differs
+            }
+
+            // Wait for a short period of time
+            delay(delayTime);
+
+            // Turn off the LEDs in the second row
+            for (int i = 0; i < 4; i++)
+            {
+                digitalWrite(leds[row2 * 4 + i], LOW); // Adjust this if your setup differs
             }
         }
     }
@@ -440,18 +453,21 @@ LEDMatrix ledMatrix(leds);
 
 void setup()
 {
+    randomSeed(analogRead(0));
     Serial.begin(9600);
     ledMatrix.begin();
-    ledMatrix.flashAll(300, 20000);
+    ledMatrix.flashAll(300, 10000);
 }
 
 void loop()
 {
-    ledMatrix.playRandomSequence();
-    ledMatrix.all(LOW);
-    unsigned long delay = random(10000L, 30000L);
-    unsigned long duration = random(60000L, 300000L);
-    Serial.println("randomLed in Loop");
-    ledMatrix.randomLed(delay, duration);
-    ledMatrix.all(LOW);
+    // ledMatrix.playRandomSequence();
+    // ledMatrix.all(LOW);
+    // unsigned long delay = random(10000L, 30000L);
+    // unsigned long duration = random(60000L, 300000L);
+    // Serial.println("randomLed in Loop");
+    // ledMatrix.randomLed(delay, duration);
+    // ledMatrix.all(LOW);
+
+    ledMatrix.alternateBlinking(200, 10000);
 }
